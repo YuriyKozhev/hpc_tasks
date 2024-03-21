@@ -130,14 +130,14 @@ void parallel_fill(
     const auto N = std::thread::hardware_concurrency();
     auto thread_pool = MyThreadPool{N};
 	for (size_t w = 0; w < width; w++) {
-	    for (size_t batch = 0; batch < height / batch_size; batch++) {
+	    for (size_t batch = 0; batch <= height / batch_size; batch++) {
             auto task = Task{[&bmp, x_min, y_min, dx, dy, w, batch, iters_limit, batch_size, height] () {
                 for (size_t hh = batch * batch_size; hh < (batch + 1) * batch_size & hh < height; hh++) {
                     double x = x_min + w * dx;
                     double y = y_min + hh * dy;
                     int value = mandelbrot(x, y, iters_limit);
                     auto colors = get_bgr(value, iters_limit);
-                    bmp.set_pixel(w, hh, std::get<0>(colors), std::get<1>(colors), std::get<2>(colors), 255);
+                    bmp.set_pixel(w, hh, std::get<0>(colors), std::get<1>(colors), std::get<2>(colors));
                 }
             }};
             thread_pool.queue_task(task);
@@ -154,12 +154,11 @@ void sequential_fill(
     assert(batch_size == -1);
 	for (size_t w = 0; w < width; w++) {
 	    for (size_t h = 0; h < height; h++) {
-            std::mutex m;
             double x = x_min + w * dx;
             double y = y_min + h * dy;
             int value = mandelbrot(x, y, iters_limit);
             auto colors = get_bgr(value, iters_limit);
-            bmp.set_pixel(w, h, std::get<0>(colors), std::get<1>(colors), std::get<2>(colors), 255);
+            bmp.set_pixel(w, h, std::get<0>(colors), std::get<1>(colors), std::get<2>(colors));
 		}
 	}
 }
