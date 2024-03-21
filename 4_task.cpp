@@ -234,12 +234,12 @@ int main(int argc, char **argv) {
 
     std::cout << "Sequential fill" << std::endl;
     test_filling_algorithm(sequential_fill, width, height, x_min, y_min, dx, dy, 
-        iters_limit, "seq.bmp", -1, newtons_iter, polynomial_roots, colors_vec);
+        iters_limit, "newton_seq.bmp", -1, newtons_iter, polynomial_roots, colors_vec);
     for (int batch_size = 10; batch_size <= 200; batch_size *= 2) {
         std::cout << "Parallel fill, batch = " << batch_size << std::endl;
         test_filling_algorithm(
             parallel_fill, width, height, x_min, y_min, dx, dy, iters_limit, 
-            "par.bmp", batch_size, newtons_iter, polynomial_roots, colors_vec);
+            "newton_par.bmp", batch_size, newtons_iter, polynomial_roots, colors_vec);
     }
     return 0;
 }
